@@ -37,7 +37,6 @@ class LightCurve:
 
     def __repr__(self):
         class_name = type(self).__name__
-        class_name = 'foo'
         components = reprlib.repr(list(itertools.islice(self.timeseries,0,10)))
         components = components[components.find('['):]
         return '{}({})'.format(class_name, components)
