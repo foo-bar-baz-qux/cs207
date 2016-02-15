@@ -62,6 +62,9 @@ uint64_t countBitsSet(bloom_filter_t *B) {
 
 int main() {
   int tN = 6, i;
+  int fp=0;
+
+  uint64_t realN[1000], rN = 100;
   uint64_t testK[6] = {0, 1, 2, 3, 13, 97};
   bloom_filter_t testH;
   bloom_init(&testH, 1000);
@@ -77,11 +80,21 @@ int main() {
   //   printf("%" PRIu64 ", ", hash2(&testH, testK[i]));
   // }
 
-  for( i = 1; i <= 70; i++ ) {
-    bloom_add(&testH, i);
+
+  for( i = 1; i <= rN; i++ ) {
+    uint64_t cur = rand()%1000;
+    realN[i] = cur;
+    bloom_add(&testH, cur);
+
   }
 
+  for( i = 1; i <= rN; i++ ) {
+    if( bloom_check(&testH, realN[i]) == 0 ) fp++;
+  }
+
+
   printf("Bits set: %" PRIu64, countBitsSet(&testH));
+  printf("FP: %d\n", fp);
   bloom_destroy(&testH);
   return 0;
 }

@@ -9,7 +9,7 @@ typedef struct {
   index_t count; // in bits
   index_t *table;
 } bloom_filter_t;
-#define N_HASHES 3
+#define N_HASHES 5
 
 void set_bit(bloom_filter_t *B, index_t i);
 index_t get_bit(bloom_filter_t *B, index_t i);
