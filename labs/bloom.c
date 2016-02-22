@@ -65,7 +65,7 @@ int * createRandArray(int N) {
   int i;
   int *arr = (int *) malloc(N * sizeof(int));
 
-  if( arr == NULL ) return NULL; // Error in allocataing array
+  if( arr == NULL ) return NULL; // Error in allocating array
 
 
   for( i=0; i<N; i++ ) {
@@ -93,7 +93,7 @@ void experiment(int *inp1, int *inp2) {
         break;
       }
     }
-    if( !ok ) break;
+    if( !ok ) continue;
 
     if( bloom_check(&testH, inp2[i]) != 0 ) fp++;
   }
