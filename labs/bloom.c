@@ -1,5 +1,6 @@
 #include "bloom.h"
 #include <stdio.h>
+#include <time.h>
 #include <inttypes.h>
 
 index_t hash1(bloom_filter_t *B, key_t k) {
@@ -60,14 +61,59 @@ uint64_t countBitsSet(bloom_filter_t *B) {
   return ret;
 }
 
-int main() {
-  int tN = 6, i;
-  int fp=0;
+int * createRandArray(int N) {
+  int i;
+  int *arr = (int *) malloc(N * sizeof(int));
 
-  uint64_t realN[1000], rN = 100;
-  uint64_t testK[6] = {0, 1, 2, 3, 13, 97};
+  if( arr == NULL ) return NULL; // Error in allocataing array
+
+
+  for( i=0; i<N; i++ ) {
+    arr[i] = rand()%1000000;
+  }
+
+  return arr;
+}
+
+void experiment(int *inp1, int *inp2) {
+  int i, j, fp = 0;
+  uint64_t bSet;
   bloom_filter_t testH;
-  bloom_init(&testH, 1000);
+
+  bloom_init(&testH, 1000); // Init the bloom filter
+
+  for( i = 0; i < 100; i++ ) bloom_add(&testH, inp1[i]); // Add numbers from inp1
+  bSet = countBitsSet(&testH); // Get bits set in the bloom filter (occupancy)
+
+  for( i = 0; i < 100; i++ ) {
+    int ok = 1; // Check that the inp2 number is not in inp1
+    for( j = 0; j <100; j++ ) {
+      if( inp2[i] == inp1[j] ) {
+        ok = 0;
+        break;
+      }
+    }
+    if( !ok ) break;
+
+    if( bloom_check(&testH, inp2[i]) != 0 ) fp++;
+  }
+
+  // Reference: http://stackoverflow.com/questions/9225567/how-to-print-a-int64-t-type-in-c
+  printf("Occupancy: %" PRIu64 ", FP: %d\n", bSet, fp);
+}
+
+int main() {
+  int *inp1, *inp2;
+  srand(time(NULL)); // Seed the random generator
+
+  // Testing the bloom filter
+  // --------------------------------
+
+  // int tN = 6, i;
+  // uint64_t realN[1000], rN = 100;
+  // // uint64_t testK[6] = {0, 1, 2, 3, 13, 97};
+  // bloom_filter_t testH;
+  // bloom_init(&testH, 1000);
   // for( i=0; i<tN; i++ ) {
   //
   //   // Reference: http://stackoverflow.com/questions/9225567/how-to-print-a-int64-t-type-in-c
@@ -80,21 +126,14 @@ int main() {
   //   printf("%" PRIu64 ", ", hash2(&testH, testK[i]));
   // }
 
+  // bloom_destroy(&testH);
 
-  for( i = 1; i <= rN; i++ ) {
-    uint64_t cur = rand()%1000;
-    realN[i] = cur;
-    bloom_add(&testH, cur);
+  // Running the experiments
+  // --------------------------------
+  inp1 = createRandArray(100);
+  inp2 = createRandArray(100);
 
-  }
+  experiment(inp1, inp2);
 
-  for( i = 1; i <= rN; i++ ) {
-    if( bloom_check(&testH, realN[i]) == 0 ) fp++;
-  }
-
-
-  printf("Bits set: %" PRIu64, countBitsSet(&testH));
-  printf("FP: %d\n", fp);
-  bloom_destroy(&testH);
   return 0;
 }
