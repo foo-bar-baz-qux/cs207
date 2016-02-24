@@ -2,7 +2,7 @@ def binary_search(da_array: list, needle, left:int=0, right:int=-1) -> int:
     """
     An algorithm that operates in O(lg(n)) to search for an element
     in an array sorted in ascending order.
-    
+
     Parameters
     ----------
     da_array : list
@@ -14,18 +14,18 @@ def binary_search(da_array: list, needle, left:int=0, right:int=-1) -> int:
     right: int, optional
         the right index in the array to search to. Default is -1
         in which case we will use the end of the array `len(da_array) - 1`
-        
+
     Returns
     -------
     index: int
         an integer representing the index of `needle` if found, and -1
         otherwise
-        
+
     Notes
     -----
     PRE: `da_array` is sorted in non-decreasing order (thus items in
         `da_array` must be comparable: implement < and ==)
-    POST: 
+    POST:
         - `da_array` is not changed by this function (immutable)
         - returns `index`=-1 if `needle` is not in `da_array`
         - returns an int `index ` in [0:len(da_array)] if
@@ -33,7 +33,7 @@ def binary_search(da_array: list, needle, left:int=0, right:int=-1) -> int:
     INVARIANTS:
         - If `needle` in `da_array`, needle in `da_array[rangemin:rangemax]`
           is a loop invariant in the while loop below.
-          
+
     Examples
     --------
     >>> input = list(range(10))
@@ -41,27 +41,9 @@ def binary_search(da_array: list, needle, left:int=0, right:int=-1) -> int:
     5
     >>> binary_search(input, 4.5)
     -1
-    >>> binary_search(input, 10)
-    -1
-    >>> binary_search([5], 5)
-    0
-    >>> binary_search([5], 4)
-    -1
     >>> import numpy as np
-    >>> binary_search([1,2,np.inf], 2)
-    1
     >>> binary_search([1,2,np.inf], np.inf)
     2
-    >>> binary_search(input, 5, 1,3)
-    -1
-    >>> binary_search(input, 2, 1,3)
-    2
-    >>> binary_search(input, 2, 3, 1)
-    -1
-    >>> binary_search(input, 2, 2, 2)
-    2
-    >>> binary_search(input, 5, 2, 2)
-    -1
     """
     if left==0:
         rangemin = 0
@@ -72,7 +54,7 @@ def binary_search(da_array: list, needle, left:int=0, right:int=-1) -> int:
     else:
         rangemax=right
     while True:
-        "needle in da_array => needle in da_array[rangemin:rangemax]"   
+        "needle in da_array => needle in da_array[rangemin:rangemax]"
         if rangemin > rangemax:
             index = -1
             return index

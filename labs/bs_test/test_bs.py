@@ -38,6 +38,9 @@ def test_gt_range(input_data):
 def test_not_found_inrange(input_data):
     assert binary_search(input_data, 11) == -1
 
+def test_unsorted():
+    assert binary_search([10, 5, 3, 5], 4) == -1
+
 # def test_char():
 #     with raises(TypeError):
 #         myaverage(['a',3])
